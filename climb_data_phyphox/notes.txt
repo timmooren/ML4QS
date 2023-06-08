@@ -1,0 +1,5 @@
+use barometer values to calculate height 
+note wall height 
+seems like you get a lot slower before a fall (at least on challenging routes)
+
+maybe only do based on the last x seconds before the end? -> would probably lead to better results 
