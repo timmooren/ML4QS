@@ -1,20 +1,13 @@
 import pandas as pd
 import os
 
-# for num in 
-# line = f"../climb_data_phyphox/climb_phy_{num}_sien/Gyroscope.csv"
-
-
-# main_direct = "../climb_data_phyphox"
-
-# for folder in os.listdir(main_direct):
-#     print(folder)
-
 def file_to_df(filepath, files, test = True):
 
-    """Combine the data of the files per folder (e.g. Gyroscope.csv, Linear Accelerometer.csv in folder ../climb_data_phyphox/sien/climb_phy_5_sien)
+    """
+    Combine the data of the files per folder (e.g. Gyroscope.csv, Linear Accelerometer.csv in folder ../climb_data_phyphox/sien/climb_phy_5_sien)
     Returns df with all the data
-    the if-else statement can be deleted when completely sure the function works, its just to not have to fill in all the info"""
+    the if-else statement can be deleted when completely sure the function works, its just to not have to fill in all the info
+    """
 
     # initiate empty df as final df
     final = pd.DataFrame(columns = ["entry_num", "name_climber", "grading", "num_attempt", "fall_top", "climbers_rating"])
@@ -25,7 +18,7 @@ def file_to_df(filepath, files, test = True):
         final = pd.concat([df_data, final], axis=1)
 
     # for now there is this test so not all the info needs to be written yet
-    # enter the climb number
+    # enter the climb number for indexing
     if test:
         final["entry_num"] = input("what is the entry nummer? (num) ")
 
@@ -39,6 +32,9 @@ def file_to_df(filepath, files, test = True):
 
     # set the climb number as (multi?)index
     final = final.set_index("entry_num")
+    
+    
+    ### TODO: preferably this:
     # final = final.reset_index() might want to keep the original index too! 
     # so multi-index would be best
 
@@ -47,7 +43,8 @@ def file_to_df(filepath, files, test = True):
 
 def list_df_files(filepath, filenames, fillin_df, all_files = True):
 
-    """Takes a filepath to a folder of a climber with the containing e.g. gyroscope data (e.g. "../climb_data_phyphox/sien"),
+    """
+    Takes a filepath to a folder of a climber with the containing e.g. gyroscope data (e.g. "../climb_data_phyphox/sien"),
     filenames of data that needs to be collected, an empty or previously generated dataframe (empty in the beginning, 
     but previously made csv files with all this data can be used too if we climb more during this project), and an option to
     only add a selection of files or all of them in that folder.
@@ -63,6 +60,9 @@ def list_df_files(filepath, filenames, fillin_df, all_files = True):
 
         # search through folders for the necessary files ("Gyroscope.csv", "Linear Accelerometer.csv")
         for folder in list_folder:
+
+            # print the folder to know which data needs to be filled in
+            print(folder)
             
             # create a df of the files and add it to the final (fill-in) df
             current_filepath = f"{filepath}/{folder}"
