@@ -1,5 +1,7 @@
 import pandas as pd
 import os
+import datetime as dt
+import copy
 
 def file_to_df(filepath, files, test = True):
 
@@ -41,13 +43,17 @@ def file_to_df(filepath, files, test = True):
     return final
                           
 
-def list_df_files(filepath, filenames, fillin_df, all_files = True):
+def list_df_files(filepath, filenames, fillin_df, output, all_files = True):
 
     """
-    Takes a filepath to a folder of a climber with the containing e.g. gyroscope data (e.g. "../climb_data_phyphox/sien"),
-    filenames of data that needs to be collected, an empty or previously generated dataframe (empty in the beginning, 
-    but previously made csv files with all this data can be used too if we climb more during this project), and an option to
-    only add a selection of files or all of them in that folder.
+    filepath:   to a folder of a climber with the containing e.g. gyroscope data (e.g. "../climb_data_phyphox/sien"),
+    filenames:  of data that needs to be collected
+    fillin_df:  an empty or previously generated dataframe (empty in the beginning, but previously made csv files with 
+                all this data can be used too if we climb more during this project)
+    data_name:  name of outputting csv file
+    all_files:  and an option to only add a selection of files or all of them in that folder.
+    
+    Searches through all folders for the target datafiles and converts each to a Dataframe to combine all the data
     Returns a csv file, saved with all the data necessary for analysis
     """
 
@@ -69,14 +75,34 @@ def list_df_files(filepath, filenames, fillin_df, all_files = True):
             df = file_to_df(filepath = current_filepath, files = filenames, test= True)
             fillin_df = pd.concat([fillin_df, df])
             
+            # save data and create copy)
+            fillin_df.to_csv(output, index = True)
+            fillin_df.to_csv(f"{output}_copy", index = True)
 
-    #### TODO: if only selection of files
-    #### TODO: still need to save to csv
-
+    #### TODO?: if only selection of files needs to be added
+    
     return fillin_df
 
 
-df = pd.DataFrame()
-# print(file_to_df("../climb_data_phyphox/sien/climb_phy_5_sien", ["Gyroscope.csv", "Linear Accelerometer.csv"], test = True))
-print(list_df_files(filepath = "../climb_data_phyphox/sien", filenames = ["Gyroscope.csv", "Linear Accelerometer.csv"], fillin_df = df))
+def set_time(input_filepath, output_filepath, time = 0.2):
 
+    """"
+    function to set a csv file to day-time and to change the data according to the time-steps
+    doesnt work
+    """
+    df = pd.read_csv(input_filepath)
+    
+    df["Time (s)"] = pd.to_datetime(df["Time (s)"], unit="s")
+
+    if time != 0.2:
+        df = df.resample(f"{time}S", on="Time (s)").mean()
+
+    df.to_csv(output_filepath, index = True)
+
+
+df = pd.DataFrame()
+print(file_to_df("../climb_data_phyphox/sien/climb_phy_5_sien", ["Gyroscope.csv", "Linear Accelerometer.csv"], test = False))
+# list_df_files(filepath = "../climb_data_phyphox/sien", filenames = ["Gyroscope.csv", "Linear Accelerometer.csv"], fillin_df = df, output="../datasets/raw_data_sien")
+# list_df_files(filepath = "../climb_data_phyphox/tim", filenames = ["Gyroscope.csv", "Linear Accelerometer.csv"], fillin_df = df, output="../datasets/raw_data_tim")
+
+# set_time("../datasets/data_sien", "../datasets/data_sien")

@@ -2,6 +2,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import copy
+import datetime as dt
 
 # import data of climb with a fall
 df_gyro = pd.read_csv("../climb_data_phyphox/climb_phy_4_sien/Gyroscope.csv")
