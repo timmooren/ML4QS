@@ -1,0 +1,15 @@
+TO DO:
+
+- cut the data (sien)
+- add additional info to dataset (sien)
+- apply to our data Local Outlier Factor (sien)
+
+
+- IDE plots (ryo)
+- describe metrics (ryo)
+- Barometer data engineer it for raw data(ryo)
+
+
+- describe why local outlier factor (tim)
+- describe no missing values in data (tim)
+- help sien with local outlier thingy bc i suck at coding xx (tim)
