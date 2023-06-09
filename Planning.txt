@@ -1,6 +1,6 @@
 TO DO:
 
-- cut the data (sien)
+- cut the data (sien) done
 - add additional info to dataset (sien)
 - apply to our data Local Outlier Factor (sien)
 

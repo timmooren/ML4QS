@@ -26,6 +26,7 @@ def file_to_df(filepath, files, test = True):
 
     # enter all the other data
     else:
+        final["entry_num"] = input("what is the entry nummer? (num) ")
         final["name_climber"] = input("name climber? (no caps) ")
         final["grading"] = input("official grading? (num+no_cap_letter) ")
         final["num_attempt"] = input("how manyth time climbing? (num) ")
@@ -72,7 +73,7 @@ def list_df_files(filepath, filenames, fillin_df, output, all_files = True):
             
             # create a df of the files and add it to the final (fill-in) df
             current_filepath = f"{filepath}/{folder}"
-            df = file_to_df(filepath = current_filepath, files = filenames, test= True)
+            df = file_to_df(filepath = current_filepath, files = filenames, test= False)
             fillin_df = pd.concat([fillin_df, df])
             
             # save data and create copy)
@@ -101,8 +102,8 @@ def set_time(input_filepath, output_filepath, time = 0.2):
 
 
 df = pd.DataFrame()
-print(file_to_df("../climb_data_phyphox/sien/climb_phy_5_sien", ["Gyroscope.csv", "Linear Accelerometer.csv"], test = False))
+# print(file_to_df("../climb_data_phyphox/sien/climb_phy_5_sien", ["Gyroscope.csv", "Linear Accelerometer.csv"], test = False))
 # list_df_files(filepath = "../climb_data_phyphox/sien", filenames = ["Gyroscope.csv", "Linear Accelerometer.csv"], fillin_df = df, output="../datasets/raw_data_sien")
-# list_df_files(filepath = "../climb_data_phyphox/tim", filenames = ["Gyroscope.csv", "Linear Accelerometer.csv"], fillin_df = df, output="../datasets/raw_data_tim")
+list_df_files(filepath = "../climb_data_phyphox/tim", filenames = ["Gyroscope.csv", "Linear Accelerometer.csv"], fillin_df = df, output="../datasets/raw_data_tim")
 
 # set_time("../datasets/data_sien", "../datasets/data_sien")
