@@ -5,9 +5,9 @@ import copy
 import datetime as dt
 
 # import data of climb with a fall
-df_gyro = pd.read_csv("../climb_data_phyphox/sien/climb_phy_4_sien/Gyroscope.csv")
-df_lin = pd.read_csv("../climb_data_phyphox/sien/climb_phy_4_sien/Linear Accelerometer.csv")
-df_bar = pd.read_csv("../climb_data_phyphox/sien/climb_phy_4_sien/Barometer.csv")
+df_gyro = pd.read_csv("../climb_data_phyphox/sien/climb_phy_1_sien/Gyroscope.csv")
+df_lin = pd.read_csv("../climb_data_phyphox/sien/climb_phy_1_sien/Linear Accelerometer.csv")
+df_bar = pd.read_csv("../climb_data_phyphox/sien/climb_phy_1_sien/Barometer.csv")
 
 # alter column names
 df_gyro.rename(columns = {"X (rad/s)": "gyro_X", "Y (rad/s)" : "gyro_Y", "Z (rad/s)": "gyro_Z"}, inplace=True)
