@@ -92,18 +92,27 @@ def set_time(input_filepath, output_filepath, time = 0.2):
     doesnt work
     """
     df = pd.read_csv(input_filepath)
+    print(df)
     
     df["Time (s)"] = pd.to_datetime(df["Time (s)"], unit="s")
+    
 
     if time != 0.2:
         df = df.resample(f"{time}S", on="Time (s)").mean()
 
-    df.to_csv(output_filepath, index = True)
+    df.to_csv(output_filepath, index = False)
 
 
 df = pd.DataFrame()
-print(file_to_df("../climb_data_phyphox/sien/climb_phy_5_sien", ["Gyroscope.csv", "Linear Accelerometer.csv"], test = False))
+
+### example file to df
+# print(file_to_df("../climb_data_phyphox/sien/climb_phy_5_sien", ["Gyroscope.csv", "Linear Accelerometer.csv"], test = False))
+
+### run if want to create whole csv
 # list_df_files(filepath = "../climb_data_phyphox/sien", filenames = ["Gyroscope.csv", "Linear Accelerometer.csv"], fillin_df = df, output="../datasets/raw_data_sien")
 # list_df_files(filepath = "../climb_data_phyphox/tim", filenames = ["Gyroscope.csv", "Linear Accelerometer.csv"], fillin_df = df, output="../datasets/raw_data_tim")
 
-# set_time("../datasets/raw_data_sien_copy.csv", "../datasets/data_sien_time_change.csv")
+### Run to set to normal time
+# set_time("../datasets/raw_data_tim_copy.csv", "../datasets/data_tim_time_change.csv")
+
+
