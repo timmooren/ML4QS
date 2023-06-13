@@ -13,3 +13,19 @@ TO DO:
 - describe why local outlier factor (tim)
 - describe no missing values in data (tim)
 - help sien with local outlier thingy bc i suck at coding xx (tim)
+
+
+TO DO 13 jun:
+
+- ryo: change to real time (from raw_data_sien, raw_data_tim, to: data_tim_time_change, data_sien_time_change)
+- sien: cut tims data
+- sien: recut after change real time (rerun cut file)
+- sien: make snippets code (20 seconds)
+
+- add the distance (tim)
+- add heart data 
+- run tims grade file to convert
+
+
+- create snippet df
+- build random forest
