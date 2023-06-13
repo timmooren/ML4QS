@@ -45,10 +45,10 @@ def chauvenets_criterion(data_table, col_list, C):
 
     return output   
 
-outlier = chauvenets_criterion("../datasets/cut_data/cut_data_sien.csv", ["X (m/s^2)", "Y (m/s^2)", "Z (m/s^2)", "Time (s).1", "X (rad/s)", "Y (rad/s)", "Z (rad/s)"], 5)
+outlier = chauvenets_criterion("../datasets/cut_data/cut_data_sien.csv", ["X (m/s^2)", "Y (m/s^2)", "Z (m/s^2)", "Time (s).1", "X (rad/s)", "Y (rad/s)", "Z (rad/s)"], 2)
 
 print(outlier)
 
-idk = outlier["X (m/s^2)_outlier"].value_counts()
+idk = outlier["Y (m/s^2)_outlier"].value_counts()
 print(idk)
 

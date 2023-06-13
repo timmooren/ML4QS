@@ -24,21 +24,8 @@ def plot_show_fall(file, fall_numbers):
             plt.savefig(f"../plots/cutoff_fall_marker/gyro_fall_entrynum{group}.png")
 
 
-def remove_fall(csv_file, index_list, save_to):
-
-    """index_list: give indices of the rows that need to be dropped (+1 included)"""
-
-    df = pd.read_csv(csv_file)
-
-    for set in index_list:
-        
-        df.drop(range(set[0], set[1]), inplace = True)
-
-    df.to_csv(save_to)
-
-
 def draw_line(image, save_name, line_length, line_coordinate):
-    """ draw line to see the fall point """ 
+    """ produced with chatgpt: draw line to see the falling point """ 
 
     # Load the image
     pic = Image.open(image)
@@ -72,6 +59,23 @@ def draw_line(image, save_name, line_length, line_coordinate):
     # Save the modified image
     pic.save(save_name)
 
+def remove_fall_byindex(csv_file, index_list, save_to):
+
+    """index_list: give indices of the rows that need to be dropped (+1 included)"""
+
+    df = pd.read_csv(csv_file)
+
+    for set in index_list:
+        
+        df.drop(range(set[0], set[1]), inplace = True)
+
+    df.to_csv(save_to, index = False)
+
+# def remove_fall_bytime()
+
+
+
+
 
 ### Run the following lines to plot the data of the falls 
 # plot_show_fall('../datasets/raw_data_sien.csv', [3, 4, 13, 14, 16, 24, 25])
@@ -80,7 +84,8 @@ def draw_line(image, save_name, line_length, line_coordinate):
 
 ### Run for the following line to drop certain indices
 # remove falls siens first dataset
-# remove_fall("../datasets/data_sien_time_change.csv", [[6624, 6631],[1544, 1554], [4714, 4727], [2951, 2970], [10457, 10466], [3837, 3846], [8035, 8047]], "../datasets/cut_data/cut_data_sien.csv")
+remove_fall_byindex("../datasets/data_sien_time_change.csv", [[6624, 6631],[1544, 1554], [4714, 4727], [2951, 2970], [10457, 10466], [3837, 3846], [8035, 8047]], "../datasets/cut_data/cut_data_sien.csv")
+remove_fall_byindex("../datasets/data_tim_time_change.csv", [[2365, 2380],[1598, 1604], [468, 482], [4848, 4863], [7185, 7198], [7642, 7667]], "../datasets/cut_data/cut_data_tim.csv")
 
 
 ### Run the following line to draw a line in a plot and save 
