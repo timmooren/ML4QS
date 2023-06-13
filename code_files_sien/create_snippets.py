@@ -1,4 +1,5 @@
 import pandas as pd
+import random
 
 def create_snippets(file, snippet_length):
     
@@ -6,9 +7,11 @@ def create_snippets(file, snippet_length):
     final_data = pd.DataFrame(columns = list(df.columns)+["snippet"])
     groups = df.groupby("entry_num")
 
-    # extract last 20 seconds snippet
+    # extract last 20 seconds snippet and random snippet
     for _, group in groups:
         
+        ## last 20 seconds:
+
         # obtain last datapoint per group and obtain snippet
         last_sec = group['Time (s)'].iloc[-1]
         snippet_start = last_sec - snippet_length
@@ -25,7 +28,41 @@ def create_snippets(file, snippet_length):
         # remove this snippet from the original dataset (to avoid double picking)
         df.drop(indices, inplace = True)
 
-        print(final_data)
+
+        ## random snippet:
+
+        # set last possible initial snippet point
+        random_snippet_max = snippet_start - snippet_length
+        # print(random_snippet_max)
+
+        # create list of possible initial snippet points
+        mask = group["Time (s)"] < random_snippet_max
+        indices = list(group.loc[mask].index)
+        # print(indices)
+
+        # set boundries of random snippet
+        rand_start = random.choice(indices)
+        rand_end = rand_start + snippet_length
+
+        # print(rand_start)
+        # print(rand_end)
+
+        mask = (group["Time (s)"] > rand_start) & (group["Time (s)"] < rand_end)
+        indi = list(group.loc[mask].index)
+        print(indi)
+        # idk = group.loc[indices]
+        # print(idk)
+
+
+
+
+
+
+        
+
+
+
+        
 
     ### TODO: 
         # Noteer in de dataframe dat de 'last_sec" snipplet is en niet 'random_snipplet'
