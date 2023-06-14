@@ -114,5 +114,3 @@ df = pd.DataFrame()
 
 ### Run to set to normal time
 # set_time("../datasets/raw_data_tim_copy.csv", "../datasets/data_tim_time_change.csv")
-
-

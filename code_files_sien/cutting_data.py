@@ -71,7 +71,47 @@ def remove_fall_byindex(csv_file, index_list, save_to):
 
     df.to_csv(save_to, index = False)
 
-# def remove_fall_bytime()
+def remove_fall_bytime(csv_file, file_path, lst):
+
+    df = pd.read_csv(csv_file)
+
+    for item in lst:
+
+        entry_num = item[0]
+        cut_time = item[1]
+
+        # obtain indices to drop
+        idx = list(df.index[(df["entry_num"] == entry_num) & (df["Time (s)"] >= cut_time)])
+        print(entry_num)
+        print(idx)
+    
+        df.drop(idx, inplace = True)
+
+    df.to_csv(file_path)
+
+    
+
+
+
+        
+
+
+
+    # for entry_num in fall_list:
+
+
+    # for index, group in enumerate(groups):
+        
+        # print('Spark' in df['Courses'].unique())
+        # print(group)
+        # mask = group["Time (s)"] > lst_time[index]
+        # indices = list(group.loc[mask].index)
+        # group.drop(indices, inplace = True)
+
+
+
+
+
 
 
 
@@ -81,12 +121,14 @@ def remove_fall_byindex(csv_file, index_list, save_to):
 # plot_show_fall('../datasets/raw_data_sien.csv', [3, 4, 13, 14, 16, 24, 25])
 # plot_show_fall('../datasets/raw_data_tim.csv', [9, 10, 11, 19, 22, 23])
 
+### Run the following line to draw a line in a plot and save 
+# draw_line("../plots/cutoff_fall_marker/gyro_fall_entrynum4.png", "../plots/cutoff_fall_marker/MARKER_gyro_fall_entrynum4.png", 16, 960)
 
 ### Run for the following line to drop certain indices
 # remove falls siens first dataset
-remove_fall_byindex("../datasets/data_sien_time_change.csv", [[6624, 6631],[1544, 1554], [4714, 4727], [2951, 2970], [10457, 10466], [3837, 3846], [8035, 8047]], "../datasets/cut_data/cut_data_sien.csv")
-remove_fall_byindex("../datasets/data_tim_time_change.csv", [[2365, 2380],[1598, 1604], [468, 482], [4848, 4863], [7185, 7198], [7642, 7667]], "../datasets/cut_data/cut_data_tim.csv")
+# remove_fall_byindex("../datasets/data_sien_time_change.csv", [[6624, 6631],[1544, 1554], [4714, 4727], [2951, 2970], [10457, 10466], [3837, 3846], [8035, 8047]], "../datasets/cut_data/cut_data_sien.csv")
+# remove_fall_byindex("../datasets/data_tim_time_change.csv", [[2365, 2380],[1598, 1604], [468, 482], [4848, 4863], [7185, 7198], [7642, 7667]], "../datasets/cut_data/cut_data_tim.csv")
 
-
-### Run the following line to draw a line in a plot and save 
-# draw_line("../plots/cutoff_fall_marker/gyro_fall_entrynum4.png", "../plots/cutoff_fall_marker/MARKER_gyro_fall_entrynum4.png", 16, 960)
+## Run to drop datapoints by time
+remove_fall_bytime("../datasets/raw_data_sien.csv", "../datasets/cut_data/cut_data_sien.csv", [[3, 153.2797517], [4, 189.9308711], [13, 68.81188696], [14, 99.74502792], [16, 123.9687483], [25, 174.5428594], [24, 282.813116]])
+remove_fall_bytime("../datasets/raw_data_tim.csv", "../datasets/cut_data/cut_data_tim.csv", [[9, 153.0813127],[10, 224.6286238], [11, 94.31351708], [19, 153.0707448], [22, 60.91507088], [23, 89.37636454]])

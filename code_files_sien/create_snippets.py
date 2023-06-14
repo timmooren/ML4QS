@@ -53,15 +53,6 @@ def create_snippets(file, snippet_length):
         # idk = group.loc[indices]
         # print(idk)
 
-
-
-
-
-
-        
-
-
-
         
 
     ### TODO: 
@@ -76,3 +67,4 @@ def create_snippets(file, snippet_length):
 
 # create_snippets("../datasets/cut_data/cut_data_sien.csv", 20)
 create_snippets("../datasets/raw_data_sien.csv", 20)
+
