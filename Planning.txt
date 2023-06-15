@@ -17,8 +17,8 @@ TO DO:
 
 TO DO 13 jun:
 
-- ryo: change to real time (from raw_data_sien, raw_data_tim, to: data_tim_time_change, data_sien_time_change)
-- done sien: cut tims data
+- DONE yo: change to real time (from raw_data_sien, raw_data_tim, to: data_tim_time_change, data_sien_time_change)
+- DONE sien: cut tims data
 - sien: recut after change real time (rerun cut file)
 - sien: REMOVE outliers with outlier file
 - sien: make snippets code (20 seconds)

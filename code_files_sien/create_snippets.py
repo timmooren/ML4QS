@@ -12,7 +12,7 @@ def create_snippets(file, snippet_length):
         
         ## last 20 seconds:
 
-        # obtain last datapoint per group and obtain snippet
+        # obtain last datapoint per group and snippet time interval
         last_sec = group['Time (s)'].iloc[-1]
         snippet_start = last_sec - snippet_length
 
@@ -36,7 +36,7 @@ def create_snippets(file, snippet_length):
         # print(random_snippet_max)
 
         # create list of possible initial snippet points
-        mask = group["Time (s)"] < random_snippet_max
+        mask = group["Time (s)"] <= random_snippet_max
         indices = list(group.loc[mask].index)
         # print(indices)
 
