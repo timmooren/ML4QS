@@ -67,13 +67,3 @@ class Data:
             self.test_labels,
         ) = train_test_split(X, y, test_size=test_size, random_state=42)
 
-    @staticmethod
-    def french_grade_to_num(french_grade):
-        mapping = {"a": 0.0, "b": 0.3, "c": 0.7, "+": 0.1}
-        num_grade = 0
-        for char in french_grade:
-            if char.isdigit():
-                num_grade += int(char)
-            elif char in mapping:
-                num_grade += mapping[char]
-        return num_grade
