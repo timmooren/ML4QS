@@ -49,6 +49,8 @@ sc = ax.scatter(position_x, position_y, position_z, c=colors)
 ax.set_xlabel("X")
 ax.set_ylabel("Z")
 ax.set_zlabel("Y")
+# Inverting the Y-axis
+ax.invert_yaxis()
 
 # Adding a colorbar
 plt.colorbar(sc, label="Time (s)", pad=0.1)
