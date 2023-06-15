@@ -14,9 +14,9 @@ def french_grade_to_num(french_grade):
 
 
 def features(df):
-    df["magnitude"] = np.sqrt(df["acc_x"] ** 2 + df["acc_y"] ** 2 + df["acc_z"] ** 2)
-    df["roll"] = np.arctan2(df["acc_y"], df["acc_z"])
-    df["pitch"] = np.arctan2(df["acc_x"], np.sqrt(df["acc_y"] ** 2 + df["acc_z"] ** 2))
+    df["magnitude"] = np.sqrt(df["X (m/s^2)"] ** 2 + df["Y (m/s^2)"] ** 2 + df["Z (m/s^2)"] ** 2)
+    df["roll"] = np.arctan2(df["Y (m/s^2)"], df["Z (m/s^2)"])
+    df["pitch"] = np.arctan2(df["X (m/s^2)"], np.sqrt(df["Y (m/s^2)"] ** 2 + df["Z (m/s^2)"] ** 2))
 
     # velocity
     df["Velocity_X"] = df["X (m/s^2)"].cumsum() * df["Time (s)"].diff()
@@ -34,5 +34,8 @@ def features(df):
         + df["Displacement_Y"] ** 2
         + df["Displacement_Z"] ** 2
     )
+
+    # nice 
+    df = df.fillna(0)
 
     return df
