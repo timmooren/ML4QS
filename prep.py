@@ -2,11 +2,8 @@ import pandas as pd
 import random
 
 def create_snippets(df, snippet_length, freq):
-    
-    """
-    
-    """
 
+    df = df.reset_index(drop = True)
     final_data = pd.DataFrame(columns = list(df.columns)+["snippet"])
     groups = df.groupby("entry_num")
     
@@ -28,27 +25,23 @@ def create_snippets(df, snippet_length, freq):
         df_20sec = group.loc[indices]
         df_20sec["snippet"] = "last_seconds"
         final_data = pd.concat([final_data, df_20sec], axis = 0)
-
-        # remove this snippet from the original dataset (to avoid double picking)
-        group.drop(indices, inplace = True)
         
         ## random snippet:
 
-        # set last possible initial snippet point
-        random_snippet_max = snippet_start - snippet_length
+        # obtain possible indices for the random snippet
+        indices = group.index[:-200].tolist()
 
-
-        mask = group["Time (s)"] <= random_snippet_max
-        indices = list(group.loc[mask].index)
-
+        # obtain indices random snippet
         rand_start = random.choice(indices)
         rand_end = rand_start + (snippet_length * freq)
-        
-        
-        random_20sec = group.loc[rand_start : rand_end-1]
-        random_20sec["snippet"] = "random_snippet"
-        random_20sec["fall_top"] = 0
+
+        random_20sec = group.loc[rand_start : rand_end]
+
+        random_20sec.loc[:, "snippet"] = "random_snippet"
+        random_20sec.loc[:, "fall_top"] = 0
         final_data = pd.concat([final_data, random_20sec], axis = 0)
     
+    final_data = final_data.reset_index(drop = True)
+
     return final_data
 
