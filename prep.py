@@ -45,3 +45,9 @@ def create_snippets(df, snippet_length, freq):
 
     return final_data
 
+def change_climb_ID(df):
+
+    df['climb_id'] = df['entry_num'].astype(str) + '.' + df['snippet'].replace({"last_seconds": "1", "random_snippet": "2"})
+    df = df.drop(columns = ['entry_num', 'snippet'])
+
+    return df
