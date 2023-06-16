@@ -51,3 +51,25 @@ def change_climb_ID(df):
     df = df.drop(columns = ['entry_num', 'snippet'])
 
     return df
+
+
+def aggregate_rf(df):
+    '''aggregates rows grouped by climb ID for random forest model '''
+
+    df_copy = df.copy()
+    aggregation_method = {}
+    sum_vars = ['Time (s)', 'distance'] 
+    max_vars = ['climb_id','name_climber', 'num_attempt', 'fall_top']
+
+    # maps variable to aggregation method 
+    for var in df_copy.columns: 
+        if var in sum_vars: 
+            aggregation_method[var] = 'sum'  
+        elif var in max_vars:
+            aggregation_method[var] = 'max' # for categorical objects (same for every id)
+        else: 
+            aggregation_method[var] = 'mean' 
+
+    agg_df = df_copy.groupby('climb_id').agg(aggregation_method)
+
+    return agg_df
