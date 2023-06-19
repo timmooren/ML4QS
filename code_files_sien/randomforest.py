@@ -21,3 +21,26 @@ def random_forest(df):
 
     accuracy = accuracy_score(Y_test, Y_pred)
     print("Accuracy:", accuracy)
+
+
+
+param_dist = {'n_estimators': randint(50,500),
+              'max_depth': randint(1,20)}
+
+# Create a random forest classifier
+mod = RandomForestClassifier()
+
+# Use random search to find the best hyperparameters
+rand_search = RandomizedSearchCV(mod, 
+                                 param_distributions = param_dist, 
+                                 n_iter=5, 
+                                 cv=5)
+
+# Fit the random search object to the data
+rand_search.fit(X_train, y_train)
+
+# Create a variable for the best model
+best_rf = rand_search.best_estimator_
+
+# Print the best hyperparameters
+print('Best hyperparameters:',  rand_search.best_params_)

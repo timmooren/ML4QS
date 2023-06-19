@@ -35,3 +35,10 @@ what to run before getting the proper dataset:
 - check outlier - remove ?
 - rerun cut file
 - rerun snip file
+
+
+planning week 3:
+- add new data (run list_df_files)
+- check the time where to cut the fall
+- run the data_processing.ipynb
+- create lts
