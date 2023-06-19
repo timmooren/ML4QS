@@ -9,9 +9,8 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 from tensorflow.keras.metrics import Precision, Recall, AUC
 
-
 pd.set_option("display.max_columns", None)
-
+  
 # Load preprocessed data
 data = pd.read_csv("datasets/processed_data.csv")
 # drop datetime
