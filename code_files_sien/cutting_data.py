@@ -118,12 +118,12 @@ def remove_fall_bytime(csv_file, file_path, lst):
 
 
 ### Run the following lines to plot the data of the falls 
-plot_show_fall('../datasets/raw_data_sien.csv', [3, 4, 13, 14, 16, 24, 25])
-plot_show_fall('../datasets/raw_data_tim.csv', [9, 10, 11, 19, 22, 23])
+# plot_show_fall('../datasets/raw_data_sien.csv', [3, 4, 13, 14, 16, 24, 25])
+# plot_show_fall('../datasets/raw_data_tim.csv', [9, 10, 11, 19, 22, 23])
 
 ## session 2 
-plot_show_fall('../datasets/raw_data_sien.csv', [3, 4, 13, 14, 16, 24, 25])
-plot_show_fall('../datasets/raw_data_tim.csv', [9, 10, 11, 19, 22, 23])
+# plot_show_fall('../datasets/raw_data_sien_2.csv', [33, 35, 36, 37, 44, 45, 47])
+# plot_show_fall('../datasets/raw_data_tim_2.csv', [28, 30, 31, 38, 39, 41])
 
 ### Run the following line to draw a line in a plot and save 
 # draw_line("../plots/cutoff_fall_marker/gyro_fall_entrynum4.png", "../plots/cutoff_fall_marker/MARKER_gyro_fall_entrynum4.png", 16, 960)

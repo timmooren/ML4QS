@@ -3,9 +3,9 @@ import pandas as pd
 import re
 from pathlib import Path 
 
-def combine_start_dfs(df1, df2):
+def combine_start_dfs(df1, df2, df3, df4):
     '''concatenates start dataframes from sien & tim'''
-    return pd.concat([df1.copy(), df2.copy()])
+    return pd.concat([df1.copy(), df2.copy(), df3.copy(), df4.copy()])
 
 
 def drop_climber_rating(df):
@@ -81,7 +81,10 @@ def cut_fall(df):
     df_copy = df.copy()
     cut_lst = [
         [3, 153.2797517], [4, 189.9308711], [13, 68.81188696], [14, 99.74502792], [16, 123.9687483], [25, 174.5428594], [24, 282.813116], #sien
-        [9, 153.0813127],[10, 224.6286238], [11, 94.31351708], [19, 153.0707448], [22, 60.91507088], [23, 89.37636454] #tim 
+        [33, 486.73], [35, 164.48], [36, 116.27], [37, 516.16], [44, 155.21], [45, 33.35], [47, 115.98], #sien2
+        [9, 153.0813127],[10, 224.6286238], [11, 94.31351708], [19, 153.0707448], [22, 60.91507088], [23, 89.37636454], #tim 
+        [28, 84.07], [30, 41.37], [31, 159.29], [38, 111.05], [39, 23.91], [41, 76.6] #tim2
+
                ]
     
     for item in cut_lst:
