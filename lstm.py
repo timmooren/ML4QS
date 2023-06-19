@@ -1,8 +1,14 @@
 # %%
 import numpy as np
+import optuna
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense
+from tensorflow.keras.metrics import Precision, Recall, AUC
+
 
 pd.set_option("display.max_columns", None)
 
@@ -78,35 +84,59 @@ X_train, X_test, y_train, y_test = custom_train_test_split(X, y, test_size=0.2)
 
 
 # %%
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense
 
 n_features = X_train.shape[2]  # number of features
 
-model = Sequential()
-model.add(LSTM(50, activation="relu", input_shape=(time_steps, n_features)))
-model.add(Dense(1, activation="sigmoid"))  # Binary classification
+def create_model(learning_rate, dropout_rate, hidden_units):
+    model = Sequential()
+    model.add(LSTM(hidden_units, activation="relu", input_shape=(time_steps, n_features)))
+    model.add(Dense(1, activation="sigmoid"))
+    return model
 
-from tensorflow.keras.metrics import Precision, Recall, AUC
 
 # Creating an instance for each metric
 precision = Precision(name="precision")
 recall = Recall(name="recall")
 auc = AUC(name="auc")
 
-model.compile(
-    optimizer="adam",
-    loss="binary_crossentropy",
-    metrics=["accuracy", precision, recall, auc],
-)
+
+def objective(trial):
+    # Define the hyperparameters to be tuned
+    learning_rate = trial.suggest_float("learning_rate", 1e-5, 1e-1, log=True)
+    dropout_rate = trial.suggest_float("dropout_rate", 0.0, 0.5)
+    hidden_units = trial.suggest_int("hidden_units", 16, 256, log=True)
+
+    # Create and compile the model with the suggested hyperparameters
+    model = create_model(learning_rate, dropout_rate, hidden_units)
+    optimizer = Adam(learning_rate=learning_rate)
+    model.compile(optimizer=optimizer, loss="binary_crossentropy", metrics=["accuracy"])
+
+    # Train the model
+    model.fit(X_train, y_train, epochs=20, verbose=0)
+
+    # Evaluate the model on the validation set
+    val_loss, val_acc = model.evaluate(X_val, y_val, verbose=0)
+
+    # Return the performance metric to be optimized
+    return val_acc
 
 
-class_weights = {
-    0: 1.0,
-    1: 100.0,
-}  # Assuming class 1 is the minority and needs more weight
+study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler())
+study.optimize(objective, n_trials=100)
 
-model.fit(X_train, y_train, epochs=50, verbose=1)
+best_params = study.best_params
+best_learning_rate = best_params["learning_rate"]
+best_dropout_rate = best_params["dropout_rate"]
+best_hidden_units = best_params["hidden_units"]
 
-test_loss, test_acc = model.evaluate(X_test, y_test, verbose=2)
+final_model = create_model(best_learning_rate, best_dropout_rate, best_hidden_units)
+final_model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
+final_model.fit(X_train, y_train, epochs=50, verbose=1)
+
+
+
+
+
+
+test_loss, test_acc = final_model.evaluate(X_test, y_test, verbose=2)
 print("Test accuracy:", test_acc)
