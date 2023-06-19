@@ -3,6 +3,7 @@ import os
 import datetime as dt
 import copy
 
+
 def file_to_df(filepath, files, test = True):
 
     """
@@ -63,7 +64,7 @@ def list_df_files(filepath, filenames, fillin_df, output, all_files = True):
 
         # create a list of folders (e.g. folder climb_phy_5_sien)
         list_folder = [folder for folder in os.listdir(filepath)]
-        list_folder.remove(".DS_Store")
+        # list_folder.remove(".DS_Store")
 
         # search through folders for the necessary files ("Gyroscope.csv", "Linear Accelerometer.csv")
         for folder in list_folder:
@@ -103,7 +104,28 @@ def set_time(input_filepath, output_filepath, time = 0.2):
     df.to_csv(output_filepath, index = False)
 
 
-df = pd.DataFrame()
+def add_outdoor(df, climber, outdoor = False):
+    if outdoor == True and climber == "tim":
+        groups = df.groupby("num_entry")
+        for group in groups:
+            if group["num_entry"] > 37:
+                df["outdoor"] = 1
+            else: 
+                df["outdoor"] = 0
+    elif outdoor == True and climber == "sien":
+        groups = df.groupby("num_entry")
+        for group in groups:
+            print(group["num_entry"])
+            # if group["num_entry"] > 42:
+            #     df["outdoor"] = 1
+            # else: 
+            #     df["outdoor"] = 0
+        
+    else:
+        df["outdoor"] = 0
+
+    return df
+
 
 ### example file to df
 # print(file_to_df("../climb_data_phyphox/sien/climb_phy_5_sien", ["Gyroscope.csv", "Linear Accelerometer.csv"], test = False))
@@ -111,6 +133,15 @@ df = pd.DataFrame()
 ### run if want to create whole csv
 # list_df_files(filepath = "../climb_data_phyphox/sien", filenames = ["Gyroscope.csv", "Linear Accelerometer.csv"], fillin_df = df, output="../datasets/raw_data_sien")
 # list_df_files(filepath = "../climb_data_phyphox/tim", filenames = ["Gyroscope.csv", "Linear Accelerometer.csv"], fillin_df = df, output="../datasets/raw_data_tim")
+# list_df_files(filepath = "../climb_data_phyphox2/sien", filenames = ["Gyroscope.csv", "Linear Accelerometer.csv"], fillin_df = df, output="../datasets/raw_data_sien_2")
+# list_df_files(filepath = "../climb_data_phyphox2/tim", filenames = ["Gyroscope.csv", "Linear Accelerometer.csv"], fillin_df = df, output="../datasets/raw_data_tim_2")
 
 ### Run to set to normal time
 # set_time("../datasets/raw_data_tim_copy.csv", "../datasets/data_tim_time_change.csv")
+
+df = pd.read_csv("../datasets/raw_data_sien_2_copy.csv")
+
+df = add_outdoor(df, climber = "sien", outdoor = True)
+
+# df.to_csv("datasets_for_me/outdoor_change_sien2.csv") 
+print(df)

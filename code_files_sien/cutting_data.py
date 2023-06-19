@@ -118,8 +118,12 @@ def remove_fall_bytime(csv_file, file_path, lst):
 
 
 ### Run the following lines to plot the data of the falls 
-# plot_show_fall('../datasets/raw_data_sien.csv', [3, 4, 13, 14, 16, 24, 25])
-# plot_show_fall('../datasets/raw_data_tim.csv', [9, 10, 11, 19, 22, 23])
+plot_show_fall('../datasets/raw_data_sien.csv', [3, 4, 13, 14, 16, 24, 25])
+plot_show_fall('../datasets/raw_data_tim.csv', [9, 10, 11, 19, 22, 23])
+
+## session 2 
+plot_show_fall('../datasets/raw_data_sien.csv', [3, 4, 13, 14, 16, 24, 25])
+plot_show_fall('../datasets/raw_data_tim.csv', [9, 10, 11, 19, 22, 23])
 
 ### Run the following line to draw a line in a plot and save 
 # draw_line("../plots/cutoff_fall_marker/gyro_fall_entrynum4.png", "../plots/cutoff_fall_marker/MARKER_gyro_fall_entrynum4.png", 16, 960)
@@ -130,5 +134,5 @@ def remove_fall_bytime(csv_file, file_path, lst):
 # remove_fall_byindex("../datasets/data_tim_time_change.csv", [[2365, 2380],[1598, 1604], [468, 482], [4848, 4863], [7185, 7198], [7642, 7667]], "../datasets/cut_data/cut_data_tim.csv")
 
 ## Run to drop datapoints by time
-remove_fall_bytime("../datasets/raw_data_sien.csv", "../datasets/cut_data/cut_data_sien.csv", [[3, 153.2797517], [4, 189.9308711], [13, 68.81188696], [14, 99.74502792], [16, 123.9687483], [25, 174.5428594], [24, 282.813116]])
-remove_fall_bytime("../datasets/raw_data_tim.csv", "../datasets/cut_data/cut_data_tim.csv", [[9, 153.0813127],[10, 224.6286238], [11, 94.31351708], [19, 153.0707448], [22, 60.91507088], [23, 89.37636454]])
+# remove_fall_bytime("../datasets/raw_data_sien.csv", "../datasets/cut_data/cut_data_sien.csv", [[3, 153.2797517], [4, 189.9308711], [13, 68.81188696], [14, 99.74502792], [16, 123.9687483], [25, 174.5428594], [24, 282.813116]])
+# remove_fall_bytime("../datasets/raw_data_tim.csv", "../datasets/cut_data/cut_data_tim.csv", [[9, 153.0813127],[10, 224.6286238], [11, 94.31351708], [19, 153.0707448], [22, 60.91507088], [23, 89.37636454]])
