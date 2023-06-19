@@ -5,8 +5,8 @@ Two types of outlier detection
 - Distribution based
 - Distance based
 
-**## Chauvenet's criterion
-**limit above which the deviation of any value from the mean is considered to be improbable
+## Chauvenet's criterion
+limit above which the deviation of any value from the mean is considered to be improbable
 
 
 ## Mixture Model
@@ -66,3 +66,41 @@ Options:
 - summerize values per attribute into single value, e.g. mean
 - estimate parameters of distribution per attributes and compare, e.g. normal distribution
 - compare the distributions of values for an attirbute , e.g. kolmogorov smirnov test
+
+
+
+
+
+# Lecture 15 June: Reinforcement Learning
+RL can help to predcit optimal actions for a user
+
+## Value Fuction (G)
+rewards we accumulate in the future
+
+## Policy
+Maps states to actions
+
+## Markov Property
+Probability of ending up in a state with a reward based on the entire history
+
+
+# Lecture 16 June
+## Q-learning
+
+
+## Elegibility
+Elegibilitiy tracing allows to credit actions that contributed longer in the past
+can be applied to sarsa and Q-learning
+
+## Approximate solutions
+build a model that predicts Q(s, a)
+
+
+## continuous values in state space
+state tree maps continuous values to a state, similar to decision tree
+
+
+## Challenges in the field
+Heterogenity in:
+- different devices
+- different people
