@@ -15,14 +15,19 @@ def create_snippets(df, snippet_length, freq):
 
         # obtain last datapoint per group and snippet time interval
         last_sec = group['Time (s)'].iloc[-1]
+        # print(last_sec)
         snippet_start = last_sec - snippet_length
+        # print(snippet_start)
+
 
         # obtain the indices of the last 20 seconds
         mask = group["Time (s)"] > snippet_start
-        indices = list(group.loc[mask].index)
+        df_20sec = group[mask]
+        # indices = list(group.loc[mask].index)
+        print(len(df_20sec))
 
-        # add snippet to final dataset
-        df_20sec = group.loc[indices]
+        # # add snippet to final dataset
+        # df_20sec = group.loc[indices]
         df_20sec["snippet"] = "last_seconds"
         final_data = pd.concat([final_data, df_20sec], axis = 0)
 

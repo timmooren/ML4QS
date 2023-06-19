@@ -92,7 +92,7 @@ def cut_fall(df):
         entry_num = item[0]
         cut_time = item[1]
         # get indices & drop 
-        idx = list(df.index[(df["entry_num"] == entry_num) & (df["Time (s)"] >= cut_time)])
+        idx = list(df_copy.index[(df_copy["entry_num"] == entry_num) & (df_copy["Time (s)"] >= cut_time)])
         df_copy = df_copy.drop(idx)
 
     return df_copy
