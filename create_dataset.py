@@ -70,7 +70,7 @@ def add_datetime(df):
         mask = df_copy["entry_num"] == entry_id
         df_copy.loc[mask, "datetime"] = datetime_sequence_dict[entry_id]
 
-    # Remove timezone information from datetime_original column
+    # Remove timezone information from datetime column
     df_copy['datetime'] = pd.to_datetime(df_copy['datetime'])
     df_copy['datetime'] = df_copy['datetime'].dt.tz_localize(None)
 
