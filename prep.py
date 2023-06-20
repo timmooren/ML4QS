@@ -1,80 +1,85 @@
 import pandas as pd
 import random
 
-def create_snippets(df, snippet_length, freq):
 
-    df = df.reset_index(drop = True)
-    final_data = pd.DataFrame(columns = list(df.columns)+["snippet"])
+def create_snippets(df, snippet_length, freq):
+    df = df.reset_index(drop=True)
+    final_data = pd.DataFrame(columns=list(df.columns) + ["snippet"])
     groups = df.groupby("entry_num")
 
-
     # extract last 20 seconds snippet and random snippet per group
-    for _, group in groups:
-
+    for group_key, group in groups:
         ## last 20 seconds:
 
         # obtain last datapoint per group and snippet time interval
-        last_sec = group['Time (s)'].iloc[-1]
+        last_sec = group["Time (s)"].iloc[-1]
         # print(last_sec)
         snippet_start = last_sec - snippet_length
         # print(snippet_start)
-
 
         # obtain the indices of the last 20 seconds
         mask = group["Time (s)"] > snippet_start
         df_20sec = group[mask]
         # indices = list(group.loc[mask].index)
-        print(len(df_20sec))
+        # print(len(df_20sec))
 
         # # add snippet to final dataset
         # df_20sec = group.loc[indices]
         df_20sec["snippet"] = "last_seconds"
-        final_data = pd.concat([final_data, df_20sec], axis = 0)
+        final_data = pd.concat([final_data, df_20sec], axis=0)
 
         ## random snippet:
+        if group_key not in [39, 45]:
 
-        # obtain possible indices for the random snippet
-        indices = group.index[:-200].tolist()
+            # obtain possible indices for the random snippet
+            indices = group.index[:-200].tolist()
 
-        # obtain indices random snippet
-        rand_start = random.choice(indices)
-        rand_end = rand_start + (snippet_length * freq)
+            # obtain indices random snippet
+            rand_start = random.choice(indices)
+            rand_end = rand_start + (snippet_length * freq)
 
-        random_20sec = group.loc[rand_start : rand_end]
+            random_20sec = group.loc[rand_start : rand_end - 1]
+            # print(len(random_20sec))
 
-        random_20sec.loc[:, "snippet"] = "random_snippet"
-        random_20sec.loc[:, "fall_top"] = 0
-        final_data = pd.concat([final_data, random_20sec], axis = 0)
+            random_20sec.loc[:, "snippet"] = "random_snippet"
+            random_20sec.loc[:, "fall_top"] = 0
+            final_data = pd.concat([final_data, random_20sec], axis=0)
 
-    final_data = final_data.reset_index(drop = True)
+    final_data = final_data.reset_index(drop=True)
 
     return final_data
 
-def change_climb_ID(df):
 
-    df['climb_id'] = df['entry_num'].astype(str) + '.' + df['snippet'].replace({"last_seconds": "1", "random_snippet": "2"})
-    df = df.drop(columns = ['entry_num', 'snippet'])
+def change_climb_ID(df):
+    df["climb_id"] = (
+        df["entry_num"].astype(str)
+        + "."
+        + df["snippet"].replace({"last_seconds": "1", "random_snippet": "2"})
+    )
+    df = df.drop(columns=["entry_num", "snippet"])
 
     return df
 
 
 def aggregate_rf(df):
-    '''aggregates rows grouped by climb ID for random forest model '''
+    """aggregates rows grouped by climb ID for random forest model"""
 
     df_copy = df.copy()
     aggregation_method = {}
-    sum_vars = ['Time (s)', 'distance']
-    max_vars = ['climb_id','name_climber', 'num_attempt', 'fall_top']
+    sum_vars = ["Time (s)", "distance"]
+    max_vars = ["climb_id", "name_climber", "num_attempt", "fall_top"]
 
     # maps variable to aggregation method
     for var in df_copy.columns:
         if var in sum_vars:
-            aggregation_method[var] = 'sum'
+            aggregation_method[var] = "sum"
         elif var in max_vars:
-            aggregation_method[var] = 'max' # for categorical objects (same for every id)
+            aggregation_method[
+                var
+            ] = "max"  # for categorical objects (same for every id)
         else:
-            aggregation_method[var] = 'mean'
+            aggregation_method[var] = "mean"
 
-    agg_df = df_copy.groupby('climb_id').agg(aggregation_method)
+    agg_df = df_copy.groupby("climb_id").agg(aggregation_method)
 
     return agg_df

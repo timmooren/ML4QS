@@ -116,9 +116,7 @@ def cut_fall(df):
         [41, 76.6],  # tim2
     ]
 
-
     for entry_num, cut_time in cut_lst:
         df = df[~((df["entry_num"] == entry_num) & (df["Time (s)"] >= cut_time))]
-
 
     return df
