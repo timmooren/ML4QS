@@ -10,7 +10,7 @@ from tensorflow.keras.layers import LSTM, Dense
 from tensorflow.keras.metrics import Precision, Recall, AUC
 
 pd.set_option("display.max_columns", None)
-  
+
 # Load preprocessed data
 data = pd.read_csv("datasets/processed_data.csv")
 # drop datetime
@@ -86,9 +86,12 @@ X_train, X_test, y_train, y_test = custom_train_test_split(X, y, test_size=0.2)
 
 n_features = X_train.shape[2]  # number of features
 
+
 def create_model(learning_rate, dropout_rate, hidden_units):
     model = Sequential()
-    model.add(LSTM(hidden_units, activation="relu", input_shape=(time_steps, n_features)))
+    model.add(
+        LSTM(hidden_units, activation="relu", input_shape=(time_steps, n_features))
+    )
     model.add(Dense(1, activation="sigmoid"))
     return model
 
@@ -99,7 +102,7 @@ recall = Recall(name="recall")
 auc = AUC(name="auc")
 
 
-def objective(trial):
+def objective(trial, X_train=X_train, y_train=y_train, X_val=X_test, y_val=y_test):
     # Define the hyperparameters to be tuned
     learning_rate = trial.suggest_float("learning_rate", 1e-5, 1e-1, log=True)
     dropout_rate = trial.suggest_float("dropout_rate", 0.0, 0.5)
@@ -129,13 +132,74 @@ best_dropout_rate = best_params["dropout_rate"]
 best_hidden_units = best_params["hidden_units"]
 
 final_model = create_model(best_learning_rate, best_dropout_rate, best_hidden_units)
-final_model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
-final_model.fit(X_train, y_train, epochs=50, verbose=1)
-
-
-
-
+final_model.compile(
+    optimizer="adam",
+    loss="binary_crossentropy",
+    metrics=["accuracy", precision, recall, auc],
+)
+history = final_model.fit(
+    X_train, y_train, epochs=50, verbose=1, validation_data=(X_test, y_test)
+)
 
 
 test_loss, test_acc = final_model.evaluate(X_test, y_test, verbose=2)
 print("Test accuracy:", test_acc)
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# convert the history.history dict to a pandas DataFrame
+hist_df = pd.DataFrame(history.history)
+
+# or save to csv
+hist_df.to_csv("history.csv")
+
+# plot the learning curves
+plt.figure(figsize=(12, 6))
+
+# plot training & validation accuracy values
+plt.figure(figsize=(12, 6))
+sns.lineplot(data=hist_df[["accuracy", "val_accuracy"]], palette="tab10", linewidth=2.5)
+plt.title("Model accuracy")
+plt.ylabel("Accuracy")
+plt.xlabel("Epoch")
+plt.legend(["Train", "Test"], loc="upper left")
+plt.show()
+
+# plot training & validation precision values
+plt.figure(figsize=(12, 6))
+sns.lineplot(
+    data=hist_df[["precision", "val_precision"]], palette="tab10", linewidth=2.5
+)
+plt.title("Model precision")
+plt.ylabel("Precision")
+plt.xlabel("Epoch")
+plt.legend(["Train", "Test"], loc="upper left")
+plt.show()
+
+# plot training & validation recall values
+plt.figure(figsize=(12, 6))
+sns.lineplot(data=hist_df[["recall", "val_recall"]], palette="tab10", linewidth=2.5)
+plt.title("Model recall")
+plt.ylabel("Recall")
+plt.xlabel("Epoch")
+plt.legend(["Train", "Test"], loc="upper left")
+plt.show()
+
+# plot training & validation AUC values
+plt.figure(figsize=(12, 6))
+sns.lineplot(data=hist_df[["auc", "val_auc"]], palette="tab10", linewidth=2.5)
+plt.title("Model AUC")
+plt.ylabel("AUC")
+plt.xlabel("Epoch")
+plt.legend(["Train", "Test"], loc="upper left")
+plt.show()
+
+# plot training & validation loss values
+plt.figure(figsize=(12, 6))
+sns.lineplot(data=hist_df[["loss", "val_loss"]], palette="tab10", linewidth=2.5)
+plt.title("Model loss")
+plt.ylabel("Loss")
+plt.xlabel("Epoch")
+plt.legend(["Train", "Test"], loc="upper left")
+plt.show()
