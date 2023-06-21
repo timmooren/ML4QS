@@ -1,5 +1,6 @@
 import pandas as pd
 import random
+import json
 
 
 def create_snippets(df, snippet_length, freq):
@@ -60,6 +61,57 @@ def change_climb_ID(df):
 
     return df
 
+def add_heart_rate(df):
+    '''adds heart-rate data to processed dataframe (df with snippets)'''
+    df_copy = df.copy()
+
+    with open('heartrate/heart_rate-2023-06-07 copy.json', 'r') as f1: 
+        hr_json1 = json.load(f1)
+    with open('heartrate/heart_rate-2023-06-14 copy.json', 'r') as f2: 
+        hr_json2 = json.load(f2)
+
+    # put datetime & heart-rate values in a list 
+    hr_data = [] 
+    for heart_entry in (hr_json1 + hr_json2):
+        dt = heart_entry['dateTime']
+        hr = heart_entry['value']['bpm']
+        hr_data.append((dt, hr))
+
+    # prep fitbit datetimes 
+    fitbit_datetimes = [x[0] for x in hr_data]
+    fitbit_datetimes = pd.to_datetime(fitbit_datetimes)
+    # prep fitbit heartreates 
+    fitbit_heart_rates = [x[1] for x in hr_data]
+    # prep datetime formats 
+    df_copy['datetime'] = pd.to_datetime(df_copy['datetime'])
+    df_copy['datetime'] = df_copy['datetime'].dt.tz_localize(None)
+
+    mapping_dict = {}
+    # iterates through each snippet 
+    for group_name, group_data in df_copy.groupby("climb_id"):
+        # gets all fitbit datetimes within snippet time interval 
+        start_time = group_data.iloc[0]['datetime']
+        end_time = group_data.iloc[-1]['datetime']
+        fitbit_snippet_datetimes = fitbit_datetimes[(fitbit_datetimes >= start_time) & (fitbit_datetimes <= end_time)]
+        # match each fitbit datetime to nearest datetime in the processed dataframe 
+        for fitbit_dt in fitbit_snippet_datetimes:
+            # datetime matching 
+            closest_index = abs(df_copy['datetime'] - fitbit_dt).idxmin()
+            data_closest_dt = df_copy.loc[closest_index, 'datetime']
+            # get corresponding heart rate values & save mapping 
+            hr_idx = fitbit_datetimes.get_loc(fitbit_dt)
+            mapping_dict[data_closest_dt] = fitbit_heart_rates[hr_idx] 
+    
+    # Add new column by using HR to datetime mapping 
+    df_copy['heart-rate'] = df_copy['datetime'].map(mapping_dict)
+    
+    # linear interpolation 
+    df_copy['heart-rate'] = df_copy.groupby('climb_id', group_keys=False)['heart-rate'].apply(lambda x: x.interpolate(limit_direction='both'))
+
+    return df_copy
+
+
+    
 
 def aggregate_rf(df):
     """aggregates rows grouped by climb ID for random forest model"""
