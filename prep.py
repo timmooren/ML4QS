@@ -61,6 +61,7 @@ def change_climb_ID(df):
 
     return df
 
+    
 def add_heart_rate(df):
     '''adds heart-rate data to processed dataframe (df with snippets)'''
     df_copy = df.copy()
@@ -104,14 +105,11 @@ def add_heart_rate(df):
     
     # Add new column by using HR to datetime mapping 
     df_copy['heart-rate'] = df_copy['datetime'].map(mapping_dict)
-    
+
     # linear interpolation 
     df_copy['heart-rate'] = df_copy.groupby('climb_id', group_keys=False)['heart-rate'].apply(lambda x: x.interpolate(limit_direction='both'))
 
     return df_copy
-
-
-    
 
 def aggregate_rf(df):
     """aggregates rows grouped by climb ID for random forest model"""
