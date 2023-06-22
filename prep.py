@@ -107,7 +107,7 @@ def add_heart_rate(df):
     df_copy['heart-rate'] = df_copy['datetime'].map(mapping_dict)
 
     # linear interpolation 
-    df_copy['heart-rate'] = df_copy.groupby('climb_id', group_keys=False)['heart-rate'].apply(lambda x: x.interpolate(limit_direction='both'))
+    # df_copy['heart-rate'] = df_copy.groupby('climb_id', group_keys=False)['heart-rate'].apply(lambda x: x.interpolate(limit_direction='both'))
 
     return df_copy
 
